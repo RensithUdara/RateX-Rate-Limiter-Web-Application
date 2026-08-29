@@ -109,20 +109,24 @@ nav {
   gap: 10px;
 }
 
-nav a {
+nav button {
   align-items: center;
+  background: transparent;
   border-radius: 8px;
   color: #b7c6dc;
   display: flex;
   font-weight: 650;
   gap: 16px;
+  justify-content: flex-start;
   min-height: 50px;
   padding: 0 14px;
+  text-align: left;
   text-decoration: none;
+  width: 100%;
 }
 
-nav a.active,
-nav a:hover {
+nav button.active,
+nav button:hover {
   background: linear-gradient(135deg, #2563ff, #1557ef);
   box-shadow: 0 12px 30px rgba(37, 99, 255, 0.28);
   color: #fff;
@@ -312,6 +316,26 @@ h1 {
   border-radius: 8px;
   color: #4f617d;
   padding: 12px 14px;
+}
+
+.page-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.page-header {
+  display: grid;
+  max-width: 820px;
+}
+
+.page-header h1 {
+  margin-bottom: 10px;
+}
+
+.page-header p {
+  color: #7282a0;
+  font-size: 18px;
+  margin-bottom: 0;
 }
 
 .metrics-grid {
@@ -648,6 +672,27 @@ h2 {
   min-height: 100px;
 }
 
+.docs-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.doc-card {
+  display: grid;
+  gap: 10px;
+}
+
+.doc-card code {
+  background: #f5f8fd;
+  border: 1px solid #dfe8f3;
+  border-radius: 8px;
+  color: #203252;
+  display: block;
+  overflow-x: auto;
+  padding: 10px 12px;
+}
+
 .tester {
   align-items: center;
   display: grid;
@@ -676,7 +721,8 @@ pre {
   }
 
   .split-grid,
-  .metrics-grid {
+  .metrics-grid,
+  .docs-grid {
     grid-template-columns: 1fr;
   }
 }
