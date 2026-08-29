@@ -15,7 +15,6 @@ import {
   revokeKey,
   sendDemoRequest,
 } from './api.js'
-import { EventsPanel } from './components/EventsPanel.jsx'
 import { Sidebar } from './components/Sidebar.jsx'
 import { Topbar } from './components/Topbar.jsx'
 import { AnalyticsPage } from './pages/AnalyticsPage.jsx'
