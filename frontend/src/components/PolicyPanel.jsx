@@ -132,9 +132,9 @@ export function PolicyPanel({ policies, newPolicy, setNewPolicy, onCreate, onUpd
           <div className="table-footer">
             <span>Showing {filteredPolicies.length ? 1 : 0} to {filteredPolicies.length} of {policies.length} policies</span>
             <div>
-              <button className="pager" type="button"><ChevronLeft size={17} /></button>
+              <button className="pager" type="button" disabled><ChevronLeft size={17} /></button>
               <button className="pager active" type="button">1</button>
-              <button className="pager" type="button"><ChevronRight size={17} /></button>
+              <button className="pager" type="button" disabled><ChevronRight size={17} /></button>
             </div>
           </div>
         </div>
