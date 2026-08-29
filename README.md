@@ -23,7 +23,7 @@ docker compose up --build
 
 Services:
 
-- API: `http://localhost:8080`
+- API: `http://localhost:8081`
 - React dashboard: run separately from `frontend/`
 - Prometheus: `http://localhost:9090`
 - Grafana: `http://localhost:3000` with `admin` / `admin`
@@ -77,7 +77,7 @@ Create an API key:
 
 ```powershell
 $policy = (Invoke-RestMethod http://localhost:8080/api/policies -Headers @{"X-Admin-Token"="dev-admin-token"})[0]
-Invoke-RestMethod http://localhost:8080/api/keys `
+Invoke-RestMethod http://localhost:8081/api/keys `
   -Method Post `
   -Headers @{"X-Admin-Token"="dev-admin-token"} `
   -ContentType application/json `
@@ -87,7 +87,7 @@ Invoke-RestMethod http://localhost:8080/api/keys `
 Call the protected endpoint:
 
 ```powershell
-Invoke-WebRequest http://localhost:8080/v1/products -Headers @{"X-API-Key"="rx_live_your_key"}
+Invoke-WebRequest http://localhost:8081/v1/products -Headers @{"X-API-Key"="rx_live_your_key"}
 ```
 
 RateX returns:
@@ -131,6 +131,7 @@ Copy `.env.example` to `.env` for local overrides.
 Important values:
 
 - `RATE_LIMIT_ALGORITHM`: `token_bucket`, `fixed_window`, or `sliding_window`
+- `RATE_LIMIT_BACKEND`: `redis` for distributed limiting, `memory` for local development without Redis
 - `RATE_LIMIT_DEFAULT_LIMIT`: default request allowance
 - `RATE_LIMIT_WINDOW_SECONDS`: default window
 - `RATE_LIMIT_BURST_CAPACITY`: token bucket capacity
