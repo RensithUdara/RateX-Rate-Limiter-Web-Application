@@ -1,12 +1,20 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { CheckCircle2, Clock, Code2, Copy, FileText, Lightbulb, Play, Send } from 'lucide-react'
+import { copyText } from '../utils/clipboard.js'
 
 export function RequestTester({ result, onSend }) {
+  const [method, setMethod] = useState('GET')
+  const [url, setUrl] = useState('http://localhost:8081/v1/products')
+  const [activeTab, setActiveTab] = useState('response')
+
   const displayResult = result || {
     status: 200,
+    statusText: 'OK',
     limit: 100,
     remaining: 90,
     retryAfter: null,
+    durationMs: 324,
+    sizeBytes: 512,
     body: {
       data: {
         products: [
@@ -16,6 +24,34 @@ export function RequestTester({ result, onSend }) {
       },
     },
   }
+
+  const tabContent = useMemo(() => {
+    const headers = {
+      'X-RateLimit-Limit': displayResult.limit,
+      'X-RateLimit-Remaining': displayResult.remaining,
+      'Retry-After': displayResult.retryAfter,
+    }
+    const curl = `curl -X ${method} "${url}" -H "X-API-Key: YOUR_API_KEY"`
+    const tabs = {
+      response: JSON.stringify(displayResult.body ?? displayResult, null, 2),
+      headers: JSON.stringify(headers, null, 2),
+      rate: JSON.stringify({
+        status: displayResult.status,
+        limit: displayResult.limit,
+        remaining: displayResult.remaining,
+        retryAfter: displayResult.retryAfter || 'not limited',
+      }, null, 2),
+      curl,
+    }
+    return tabs[activeTab]
+  }, [activeTab, displayResult, method, url])
+
+  function trySample(nextMethod, nextUrl) {
+    setMethod(nextMethod)
+    setUrl(`http://localhost:8081${nextUrl}`)
+  }
+
+  const ok = displayResult.status >= 200 && displayResult.status < 300
 
   return (
     <section className="playground-grid">
@@ -30,23 +66,22 @@ export function RequestTester({ result, onSend }) {
           </div>
         </div>
         <div className="request-line">
-          <select defaultValue="GET">
-            <option>GET</option>
-            <option>POST</option>
+          <select value={method} onChange={(event) => setMethod(event.target.value)}>
+            {['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'].map((item) => <option key={item}>{item}</option>)}
           </select>
-          <input readOnly value="http://localhost:8081/v1/products" />
-          <button onClick={onSend} className="send-button"><Send size={16} /> Send request</button>
+          <input value={url} onChange={(event) => setUrl(event.target.value)} />
+          <button type="button" onClick={() => onSend(method, url)} className="send-button"><Send size={16} /> Send request</button>
         </div>
         <div className="response-tabs">
-          <button className="active">Response</button>
-          <button>Headers</button>
-          <button>Rate Limit</button>
-          <button>cURL</button>
-          <span><CheckCircle2 size={15} /> {displayResult.status} OK</span>
-          <span><Clock size={15} /> 324 ms</span>
-          <span><FileText size={15} /> 512 B</span>
+          <Tab id="response" activeTab={activeTab} onChange={setActiveTab}>Response</Tab>
+          <Tab id="headers" activeTab={activeTab} onChange={setActiveTab}>Headers</Tab>
+          <Tab id="rate" activeTab={activeTab} onChange={setActiveTab}>Rate Limit</Tab>
+          <Tab id="curl" activeTab={activeTab} onChange={setActiveTab}>cURL</Tab>
+          <span className={ok ? 'ok-status' : 'error-status'}><CheckCircle2 size={15} /> {displayResult.status} {displayResult.statusText || ''}</span>
+          <span><Clock size={15} /> {displayResult.durationMs || 0} ms</span>
+          <span><FileText size={15} /> {displayResult.sizeBytes || 0} B</span>
         </div>
-        <pre className="code-window"><button className="copy-code" type="button"><Copy size={15} /> Copy</button>{JSON.stringify(displayResult, null, 2)}</pre>
+        <pre className="code-window"><button className="copy-code" type="button" onClick={() => copyText(tabContent)}><Copy size={15} /> Copy</button>{tabContent}</pre>
       </section>
 
       <aside className="playground-side">
@@ -59,9 +94,9 @@ export function RequestTester({ result, onSend }) {
             </div>
           </div>
           <div className="sample-list">
-            <Sample method="GET" route="/v1/products" text="Test rate limiting" />
-            <Sample method="GET" route="/v1/products?page=1" text="Test with query params" />
-            <Sample method="POST" route="/v1/products" text="Test different method" tone="purple" />
+            <Sample method="GET" route="/v1/products" text="Test rate limiting" onTry={trySample} />
+            <Sample method="GET" route="/v1/products?page=1" text="Test with query params" onTry={trySample} />
+            <Sample method="POST" route="/v1/products" text="Test different method" tone="purple" onTry={trySample} />
           </div>
         </section>
         <section className="panel checklist-card">
@@ -81,7 +116,11 @@ export function RequestTester({ result, onSend }) {
   )
 }
 
-function Sample({ method, route, text, tone = 'green' }) {
+function Tab({ id, activeTab, onChange, children }) {
+  return <button type="button" className={activeTab === id ? 'active' : ''} onClick={() => onChange(id)}>{children}</button>
+}
+
+function Sample({ method, route, text, tone = 'green', onTry }) {
   return (
     <div className="sample-request">
       <mark className={`method-badge ${tone}`}>{method}</mark>
@@ -89,7 +128,7 @@ function Sample({ method, route, text, tone = 'green' }) {
         <strong>{route}</strong>
         <small>{text}</small>
       </div>
-      <button className="secondary-action compact-action" type="button"><Play size={13} /> Try</button>
+      <button className="secondary-action compact-action" type="button" onClick={() => onTry(method, route)}><Play size={13} /> Try</button>
     </div>
   )
 }
