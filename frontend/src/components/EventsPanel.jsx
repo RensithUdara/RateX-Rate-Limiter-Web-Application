@@ -1,5 +1,5 @@
 import React from 'react'
-import { ListFilter } from 'lucide-react'
+import { ArrowRight, BarChart3, Database, FileText, Trophy } from 'lucide-react'
 
 export function EventsPanel({ events, topRoutes }) {
   return (
@@ -7,12 +7,13 @@ export function EventsPanel({ events, topRoutes }) {
       <section className="panel">
         <div className="panel-heading compact">
           <div className="heading-left">
-            <span className="icon-badge"><ListFilter size={22} /></span>
+            <span className="icon-badge"><Database size={22} /></span>
             <div>
               <h2>Recent Requests</h2>
               <p>Latest protected endpoint decisions.</p>
             </div>
           </div>
+          <button className="secondary-action compact-action">View all <ArrowRight size={15} /></button>
         </div>
         <div className="event-list">
           {events.map((event) => (
@@ -22,19 +23,26 @@ export function EventsPanel({ events, topRoutes }) {
               <small>{event.identity_type} {event.identity_value} | {event.policy_name} | {event.duration_ms}ms</small>
             </div>
           ))}
-          {events.length === 0 && <div className="empty-state slim">No request events yet.</div>}
+          {events.length === 0 && (
+            <div className="empty-state slim">
+              <FileText size={30} />
+              <span>No request events yet.</span>
+              <small>Requests will appear here once traffic is received.</small>
+            </div>
+          )}
         </div>
       </section>
 
       <section className="panel">
         <div className="panel-heading compact">
           <div className="heading-left">
-            <span className="icon-badge"><ListFilter size={22} /></span>
+            <span className="icon-badge"><Trophy size={22} /></span>
             <div>
               <h2>Top Routes</h2>
               <p>Most active routes in the last hour.</p>
             </div>
           </div>
+          <button className="secondary-action compact-action">View all <ArrowRight size={15} /></button>
         </div>
         <div className="table route-usage">
           <div className="table-head usage-head">
@@ -51,6 +59,13 @@ export function EventsPanel({ events, topRoutes }) {
               <span>{route.total}</span>
             </div>
           ))}
+          {topRoutes.length === 0 && (
+            <div className="empty-state slim">
+              <BarChart3 size={30} />
+              <span>No route data yet.</span>
+              <small>Top routes will appear here once traffic is received.</small>
+            </div>
+          )}
         </div>
       </section>
     </section>
