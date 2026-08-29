@@ -14,7 +14,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"ratex/internal/config"
 	"ratex/internal/handler"
-	"ratex/internal/limiter"
 	"ratex/internal/metrics"
 	"ratex/internal/middleware"
 	ratexredis "ratex/internal/redis"
@@ -50,8 +49,8 @@ func main() {
 	policyService := service.NewPolicyService(policyRepo)
 	apiKeyService := service.NewAPIKeyService(apiKeyRepo, userRepo)
 
-	defaultLimiter := limiter.NewTokenBucket(redisClient, cfg.DefaultBurstCapacity, cfg.DefaultWindow)
 	factory := middleware.NewLimiterFactory(redisClient, cfg)
+	defaultLimiter := factory.Default()
 
 	router := gin.New()
 	router.Use(middleware.Recovery(logger), gin.Logger())
