@@ -24,6 +24,7 @@ import { OverviewPage } from './pages/OverviewPage.jsx'
 import { PlaygroundPage } from './pages/PlaygroundPage.jsx'
 import { PoliciesPage } from './pages/PoliciesPage.jsx'
 import { RoutesPage } from './pages/RoutesPage.jsx'
+import { buildChartData } from './utils/chartData.js'
 
 export function App() {
   const [stats, setStats] = useState({ requests: 0, allowed: 0, rejected: 0 })
@@ -43,18 +44,8 @@ export function App() {
   const [newRoute, setNewRoute] = useState({ method: 'GET', route_pattern: '/v1/products', policy_id: '' })
 
   const chartData = useMemo(() => {
-    if (timeline.length > 0) {
-      return timeline.map((point) => ({
-        t: new Date(point.bucket).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        allowed: point.allowed,
-        rejected: point.rejected,
-      }))
-    }
-    return Array.from({ length: 12 }, (_, index) => {
-      const wave = index < 2 ? 0 : index < 5 ? 1 : index < 7 ? 0 : index < 10 ? 1 : 0
-      return { t: `${index * 5}s`, allowed: wave, rejected: 0 }
-    })
-  }, [timeline])
+    return buildChartData(timeline, activeRange, stats)
+  }, [timeline, activeRange, stats])
 
   async function load() {
     const [statsData, policyData, keyData, eventData, routeData, topRouteData, timelineData] = await Promise.all([
