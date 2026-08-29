@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { X } from 'lucide-react'
 import {
   createKey,
   createPolicy,
@@ -169,7 +170,12 @@ export function App() {
       <section className="workspace">
         <Topbar currentPage={currentPage} onRefresh={load} onNotify={setMessage} />
 
-        {message && <div className="notice">{message}</div>}
+        {message && (
+          <div className="notice" role="status">
+            <span>{message}</span>
+            <button className="notice-close" type="button" onClick={() => setMessage('')} aria-label="Close notification"><X size={16} /></button>
+          </div>
+        )}
 
         {currentPage === 'overview' && <OverviewPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} activeRange={activeRange} onRangeChange={setActiveRange} onViewAll={() => setCurrentPage('analytics')} />}
         {currentPage === 'keys' && <KeysPage keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={handleCreateKey} onCopy={() => setMessage('Copied to clipboard')} onDocs={() => setCurrentPage('docs')} onRevoke={(id) => confirmAction({ title: 'Revoke API key?', message: 'This key will stop authenticating requests immediately.', confirmText: 'Revoke key', onConfirm: () => action(() => revokeKey(id)) })} />}
