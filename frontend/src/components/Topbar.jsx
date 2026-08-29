@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Bell, ChevronDown, RefreshCcw, Search, Sun } from 'lucide-react'
+import { ChevronDown, RefreshCcw, Search } from 'lucide-react'
 
 const placeholders = {
   overview: 'Search policies, keys, routes...',
@@ -11,13 +11,8 @@ const placeholders = {
   docs: 'Search documentation...',
 }
 
-export function Topbar({ currentPage, onRefresh, onNotify }) {
+export function Topbar({ currentPage, onRefresh }) {
   const searchRef = useRef(null)
-
-  function toggleTheme() {
-    document.body.classList.toggle('soft-contrast')
-    onNotify?.('Theme preference updated')
-  }
 
   return (
     <div className="topbar">
@@ -28,8 +23,6 @@ export function Topbar({ currentPage, onRefresh, onNotify }) {
         <kbd onClick={() => searchRef.current?.focus()}>K</kbd>
       </label>
       <button className="ghost" onClick={onRefresh} title="Refresh data"><RefreshCcw size={18} /></button>
-      <button className="ghost" type="button" onClick={toggleTheme} title="Theme"><Sun size={18} /></button>
-      <button className="ghost" type="button" onClick={() => onNotify?.('No new notifications')} title="Notifications"><Bell size={18} /></button>
       <div className="profile">
         <span>RU</span>
         <div>
