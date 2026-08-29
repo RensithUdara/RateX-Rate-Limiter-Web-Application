@@ -45,8 +45,12 @@ select {
   color: #172238;
   height: 34px;
   min-width: 0;
-  padding: 0 38px 0 12px;
+  padding: 0 46px 0 12px;
   width: 100%;
+}
+
+select {
+  background-position: right 16px center;
 }
 
 button:disabled {
@@ -231,6 +235,7 @@ body.soft-contrast .workspace {
 }
 
 .search-box input {
+  background: transparent;
   border: 0;
   box-shadow: none;
   height: 34px;
@@ -239,7 +244,9 @@ body.soft-contrast .workspace {
 
 .search-box input:focus,
 .table-search input:focus {
+  border: 0;
   box-shadow: none;
+  outline: none;
 }
 
 .search-box kbd {
@@ -382,12 +389,28 @@ h1 {
 }
 
 .notice {
+  align-items: center;
   background: #fff;
   border: 1px solid #d9e4f2;
   border-radius: 8px;
   color: #4f617d;
-  max-width: 680px;
-  padding: 12px 14px;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  max-width: min(920px, 90%);
+  min-height: 44px;
+  padding: 10px 12px 10px 16px;
+  width: 100%;
+}
+
+.notice-close {
+  background: #f4f8ff;
+  border: 1px solid #d9e4f2;
+  color: #526984;
+  flex: 0 0 auto;
+  min-height: 30px;
+  min-width: 30px;
+  padding: 0;
 }
 
 .page-stack {
@@ -892,6 +915,7 @@ mark {
 }
 
 .table-search input {
+  background: transparent;
   border: 0;
   box-shadow: none;
   height: 34px;
@@ -1179,8 +1203,8 @@ pre {
 }
 
 .route-form.labeled {
-  align-items: end;
-  gap: 12px;
+  align-items: start;
+  gap: 14px 16px;
   grid-template-columns: 190px minmax(0, 1fr) 270px 190px;
 }
 
@@ -1202,11 +1226,12 @@ pre {
 
 .attach-button {
   min-height: 40px;
+  margin-top: 24px;
 }
 
 .route-head,
 .route-row {
-  grid-template-columns: 120px minmax(0, 1fr) minmax(0, 180px) 140px 120px;
+  grid-template-columns: 120px minmax(0, 1fr) minmax(0, 180px) 140px 130px;
 }
 
 .method-badge {
@@ -1227,7 +1252,7 @@ pre {
 
 .route-create-card,
 .route-list-card {
-  padding: 20px;
+  padding: 22px 24px;
 }
 
 .full-help {
