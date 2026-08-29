@@ -10,6 +10,8 @@ Distributed API rate limiting platform built with Go, Gin, Redis, PostgreSQL, Lu
 - IP-based default limiting and API-key policy-based limiting.
 - API key hashing with one-time secret reveal.
 - CRUD admin endpoints for policies and API keys.
+- Route-specific policy overrides for method/path combinations.
+- Request event history, top route summaries, and timeline analytics.
 - Production-style rate-limit headers and 429 responses.
 - Configurable fail-open or fail-closed Redis behavior.
 - Prometheus metrics and Grafana datasource provisioning.
@@ -63,6 +65,8 @@ GET    /healthz
 GET    /readyz
 GET    /metrics
 GET    /api/stats
+GET    /api/stats/timeline
+GET    /api/stats/routes
 GET    /api/policies
 POST   /api/policies
 PUT    /api/policies/:id
@@ -70,7 +74,18 @@ DELETE /api/policies/:id
 GET    /api/keys
 POST   /api/keys
 DELETE /api/keys/:id
+GET    /api/events
+GET    /api/route-policies
+POST   /api/route-policies
+DELETE /api/route-policies/:id
 GET    /v1/products
+```
+
+Apply all migrations manually for an existing local database:
+
+```powershell
+psql "postgres://ratex:ratex@localhost:5432/ratex?sslmode=disable" -f .\migrations\001_init.sql
+psql "postgres://ratex:ratex@localhost:5432/ratex?sslmode=disable" -f .\migrations\002_observability_and_routes.sql
 ```
 
 Create an API key:
@@ -147,3 +162,16 @@ go test ./...
 ```
 
 The test suite uses an in-memory Redis server and includes concurrent token-bucket verification.
+
+## Added Feature Modules
+
+- `internal/model/request_event.go`: request event and analytics response models
+- `internal/model/route_policy.go`: route override model
+- `internal/repository/request_event_repository.go`: event inserts, recent events, timeline, top routes
+- `internal/repository/route_policy_repository.go`: route policy CRUD and lookup
+- `internal/service/route_policy_service.go`: route policy validation
+- `internal/handler/events.go`: analytics endpoints
+- `internal/handler/route_policy.go`: route policy endpoints
+- `frontend/src/api.js`: dashboard API client
+- `frontend/src/App.jsx`: dashboard orchestration
+- `frontend/src/components/*`: separated dashboard UI panels
