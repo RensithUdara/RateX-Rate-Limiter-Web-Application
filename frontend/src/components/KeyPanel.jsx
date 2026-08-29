@@ -1,7 +1,13 @@
 import React from 'react'
 import { ChevronLeft, ChevronRight, Copy, KeyRound, Plus, Trash2 } from 'lucide-react'
+import { copyText } from '../utils/clipboard.js'
 
-export function KeyPanel({ keys, policies, newKey, setNewKey, createdKey, onCreate, onRevoke }) {
+export function KeyPanel({ keys, policies, newKey, setNewKey, createdKey, onCreate, onRevoke, onCopy }) {
+  async function handleCopy(value) {
+    await copyText(value)
+    onCopy?.()
+  }
+
   return (
     <section id="keys" className="panel">
       <div className="panel-heading compact">
@@ -21,7 +27,7 @@ export function KeyPanel({ keys, policies, newKey, setNewKey, createdKey, onCrea
         </select>
         <button className="primary-action create-key-button"><KeyRound size={17} /> Create Key</button>
       </form>
-      {createdKey && <code className="secret">{createdKey}</code>}
+      {createdKey && <code className="secret">{createdKey}<button type="button" onClick={() => handleCopy(createdKey)} title="Copy full API key"><Copy size={15} /></button></code>}
       {keys.length === 0 ? (
         <div className="empty-state">
           <KeyRound size={28} />
@@ -40,10 +46,10 @@ export function KeyPanel({ keys, policies, newKey, setNewKey, createdKey, onCrea
           {keys.map((key) => (
             <div className="row key-row" key={key.id}>
               <span>{key.name}</span>
-              <span className="key-copy">{key.key_prefix}<button type="button" title="Copy API key prefix"><Copy size={15} /></button></span>
+              <span className="key-copy">{key.key_prefix}<button type="button" onClick={() => handleCopy(key.key_prefix)} title="Copy API key prefix"><Copy size={15} /></button></span>
               <span><mark>{key.policy_name || 'default'}</mark></span>
               <span>{formatDate(key.created_at)}</span>
-              <button className="danger-icon" onClick={() => onRevoke(key.id)} title="Revoke key"><Trash2 size={15} /></button>
+              <button className="danger-icon" type="button" onClick={() => onRevoke(key.id)} title="Revoke key"><Trash2 size={15} /></button>
             </div>
           ))}
           <div className="table-footer">
