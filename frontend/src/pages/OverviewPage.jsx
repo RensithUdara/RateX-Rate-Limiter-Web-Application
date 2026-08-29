@@ -6,7 +6,7 @@ import { EventsPanel } from '../components/EventsPanel.jsx'
 
 export function OverviewPage({ stats, chartData, events, topRoutes }) {
   return (
-    <>
+    <div className="page-stack overview-page">
       <section className="hero">
         <div className="hero-copy">
           <span className="pill">Distributed API rate limiting</span>
@@ -32,6 +32,6 @@ export function OverviewPage({ stats, chartData, events, topRoutes }) {
 
       <TrafficChart data={chartData} />
       <EventsPanel events={events.slice(0, 8)} topRoutes={topRoutes} />
-    </>
+    </div>
   )
 }
