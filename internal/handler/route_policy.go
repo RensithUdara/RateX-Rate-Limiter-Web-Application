@@ -39,6 +39,20 @@ func (h RoutePolicyHandler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, route)
 }
 
+func (h RoutePolicyHandler) Update(c *gin.Context) {
+	var input model.RoutePolicy
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	route, err := h.service.Update(c.Request.Context(), c.Param("id"), input)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, route)
+}
+
 func (h RoutePolicyHandler) Delete(c *gin.Context) {
 	if err := h.service.Delete(c.Request.Context(), c.Param("id")); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
