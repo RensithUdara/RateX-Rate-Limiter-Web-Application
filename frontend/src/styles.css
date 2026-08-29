@@ -1350,6 +1350,8 @@ button:focus-visible {
 .segments button {
   border: 0;
   outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .segments button:hover {
@@ -1358,8 +1360,11 @@ button:focus-visible {
 
 .segments button.active,
 .segments button.active:hover,
-.segments button.active:focus {
+.segments button.active:focus,
+.segments button.active:focus-visible {
   background: #2563ff;
+  box-shadow: none;
   color: #fff;
+  outline: none;
 }
 
