@@ -12,6 +12,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	goredis "github.com/redis/go-redis/v9"
 	"ratex/internal/config"
 	"ratex/internal/handler"
 	"ratex/internal/metrics"
@@ -36,12 +37,17 @@ func main() {
 	}
 	defer db.Close()
 
-	redisClient := ratexredis.NewClient(cfg)
-	if err := ratexredis.Ping(ctx, redisClient); err != nil {
-		logger.Error("redis connection failed", "error", err)
-		os.Exit(1)
+	var redisClient *goredis.Client
+	if cfg.RateLimitBackend == "memory" {
+		logger.Warn("using in-memory rate limiter backend; distributed limiting is disabled")
+	} else {
+		redisClient = ratexredis.NewClient(cfg)
+		if err := ratexredis.Ping(ctx, redisClient); err != nil {
+			logger.Error("redis connection failed", "error", err)
+			os.Exit(1)
+		}
+		defer redisClient.Close()
 	}
-	defer redisClient.Close()
 
 	policyRepo := repository.NewPolicyRepository(db)
 	apiKeyRepo := repository.NewAPIKeyRepository(db)
