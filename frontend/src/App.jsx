@@ -57,23 +57,29 @@ export function App() {
 
   async function load() {
     const [statsData, policyData, keyData, eventData, routeData, topRouteData, timelineData] = await Promise.all([
-      getStats(),
-      getPolicies(),
-      getKeys(),
-      getEvents(30),
-      getRoutePolicies(),
-      getTopRoutes(),
-      getTimeline(),
+      safeLoad(getStats, { requests: 0, allowed: 0, rejected: 0 }),
+      safeLoad(getPolicies, []),
+      safeLoad(getKeys, []),
+      safeLoad(() => getEvents(30), []),
+      safeLoad(getRoutePolicies, []),
+      safeLoad(getTopRoutes, []),
+      safeLoad(getTimeline, []),
     ])
-    setStats(statsData)
-    setPolicies(policyData)
-    setKeys(keyData)
-    setEvents(eventData)
-    setRoutePolicies(routeData)
-    setTopRoutes(topRouteData)
-    setTimeline(timelineData)
-    if (!newKey.policy_id && policyData[0]) setNewKey((value) => ({ ...value, policy_id: policyData[0].id }))
-    if (!newRoute.policy_id && policyData[0]) setNewRoute((value) => ({ ...value, policy_id: policyData[0].id }))
+    setStats(statsData.value)
+    setPolicies(policyData.value)
+    setKeys(keyData.value)
+    setEvents(eventData.value)
+    setRoutePolicies(routeData.value)
+    setTopRoutes(topRouteData.value)
+    setTimeline(timelineData.value)
+    const failures = [statsData, policyData, keyData, eventData, routeData, topRouteData, timelineData].filter((item) => item.error)
+    if (failures.length > 0) {
+      setMessage('Some API data is unavailable. Restart the Go server after the latest changes.')
+    } else if (message.startsWith('Some API data')) {
+      setMessage('')
+    }
+    if (!newKey.policy_id && policyData.value[0]) setNewKey((value) => ({ ...value, policy_id: policyData.value[0].id }))
+    if (!newRoute.policy_id && policyData.value[0]) setNewRoute((value) => ({ ...value, policy_id: policyData.value[0].id }))
   }
 
   useEffect(() => {
@@ -153,4 +159,12 @@ export function App() {
       </section>
     </main>
   )
+}
+
+async function safeLoad(loader, fallback) {
+  try {
+    return { value: await loader(), error: null }
+  } catch (error) {
+    return { value: fallback, error }
+  }
 }
