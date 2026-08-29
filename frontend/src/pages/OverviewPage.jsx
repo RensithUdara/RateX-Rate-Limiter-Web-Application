@@ -4,7 +4,7 @@ import { Metric } from '../components/Metric.jsx'
 import { TrafficChart } from '../components/TrafficChart.jsx'
 import { EventsPanel } from '../components/EventsPanel.jsx'
 
-export function OverviewPage({ stats, chartData, events, topRoutes, activeRange, onRangeChange }) {
+export function OverviewPage({ stats, chartData, events, topRoutes, activeRange, onRangeChange, onViewAll }) {
   return (
     <div className="page-stack overview-page">
       <section className="hero">
@@ -31,7 +31,7 @@ export function OverviewPage({ stats, chartData, events, topRoutes, activeRange,
       </section>
 
       <TrafficChart data={chartData} activeRange={activeRange} onRangeChange={onRangeChange} />
-      <EventsPanel events={events.slice(0, 8)} topRoutes={topRoutes} />
+      <EventsPanel events={events.slice(0, 8)} topRoutes={topRoutes} onViewAllRequests={onViewAll} onViewAllRoutes={onViewAll} />
     </div>
   )
 }
