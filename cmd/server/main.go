@@ -52,8 +52,11 @@ func main() {
 	policyRepo := repository.NewPolicyRepository(db)
 	apiKeyRepo := repository.NewAPIKeyRepository(db)
 	userRepo := repository.NewUserRepository(db)
+	eventRepo := repository.NewRequestEventRepository(db)
+	routePolicyRepo := repository.NewRoutePolicyRepository(db)
 	policyService := service.NewPolicyService(policyRepo)
 	apiKeyService := service.NewAPIKeyService(apiKeyRepo, userRepo)
+	routePolicyService := service.NewRoutePolicyService(routePolicyRepo)
 
 	factory := middleware.NewLimiterFactory(redisClient, cfg)
 	defaultLimiter := factory.Default()
@@ -73,6 +76,8 @@ func main() {
 	policies := handler.NewPolicyHandler(policyService)
 	apiKeys := handler.NewAPIKeyHandler(apiKeyService)
 	stats := handler.NewStatsHandler()
+	events := handler.NewEventHandler(eventRepo)
+	routePolicies := handler.NewRoutePolicyHandler(routePolicyService)
 
 	router.GET("/healthz", health.Health)
 	router.GET("/readyz", health.Ready)
@@ -80,6 +85,8 @@ func main() {
 
 	api := router.Group("/api")
 	api.GET("/stats", stats.Overview)
+	api.GET("/stats/timeline", events.Timeline)
+	api.GET("/stats/routes", events.TopRoutes)
 
 	admin := api.Group("")
 	admin.Use(middleware.AdminAuth(cfg))
@@ -90,9 +97,13 @@ func main() {
 	admin.GET("/keys", apiKeys.List)
 	admin.POST("/keys", apiKeys.Create)
 	admin.DELETE("/keys/:id", apiKeys.Delete)
+	admin.GET("/events", events.Recent)
+	admin.GET("/route-policies", routePolicies.List)
+	admin.POST("/route-policies", routePolicies.Create)
+	admin.DELETE("/route-policies/:id", routePolicies.Delete)
 
 	protected := router.Group("/v1")
-	protected.Use(middleware.RateLimit(cfg, defaultLimiter, apiKeyRepo, factory))
+	protected.Use(middleware.RateLimitWithTelemetry(cfg, defaultLimiter, apiKeyRepo, factory, eventRepo, routePolicyRepo))
 	protected.GET("/products", handler.DemoProducts)
 
 	addr := ":" + cfg.HTTPPort
