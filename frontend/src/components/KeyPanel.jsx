@@ -55,8 +55,8 @@ export function KeyPanel({ keys, policies, newKey, setNewKey, createdKey, onCrea
           <div className="table-footer">
             <span>Showing 1 of {keys.length}</span>
             <div>
-              <button className="pager" type="button"><ChevronLeft size={17} /></button>
-              <button className="pager" type="button"><ChevronRight size={17} /></button>
+              <button className="pager" type="button" disabled><ChevronLeft size={17} /></button>
+              <button className="pager" type="button" disabled><ChevronRight size={17} /></button>
             </div>
           </div>
         </div>
