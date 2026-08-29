@@ -1,7 +1,17 @@
 import React from 'react'
-import { Activity, BookOpen, KeyRound, Route, Shield, Terminal, Zap } from 'lucide-react'
+import { Activity, BarChart3, BookOpen, KeyRound, Route, Shield, Terminal, Zap } from 'lucide-react'
 
-export function Sidebar() {
+const items = [
+  { id: 'overview', label: 'Overview', icon: Activity },
+  { id: 'keys', label: 'API Keys', icon: KeyRound },
+  { id: 'policies', label: 'Policies', icon: Shield },
+  { id: 'routes', label: 'Routes', icon: Route },
+  { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'playground', label: 'Playground', icon: Terminal },
+  { id: 'docs', label: 'Documentation', icon: BookOpen },
+]
+
+export function Sidebar({ currentPage, onNavigate }) {
   return (
     <aside className="sidebar">
       <div className="brand">
@@ -12,12 +22,19 @@ export function Sidebar() {
         </div>
       </div>
       <nav>
-        <a className="active" href="#overview"><Activity size={20} /> Overview</a>
-        <a href="#keys"><KeyRound size={20} /> API Keys</a>
-        <a href="#policies"><Shield size={20} /> Policies</a>
-        <a href="#routes"><Route size={20} /> Routes</a>
-        <a href="#tester"><Terminal size={20} /> Playground</a>
-        <a href="#docs"><BookOpen size={20} /> Documentation</a>
+        {items.map((item) => {
+          const Icon = item.icon
+          return (
+            <button
+              className={currentPage === item.id ? 'active' : ''}
+              key={item.id}
+              onClick={() => onNavigate(item.id)}
+              type="button"
+            >
+              <Icon size={20} /> {item.label}
+            </button>
+          )
+        })}
       </nav>
       <div className="connection">
         <span className="dot" />
