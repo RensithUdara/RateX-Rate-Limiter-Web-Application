@@ -100,6 +100,7 @@ func main() {
 	admin.GET("/events", events.Recent)
 	admin.GET("/route-policies", routePolicies.List)
 	admin.POST("/route-policies", routePolicies.Create)
+	admin.PUT("/route-policies/:id", routePolicies.Update)
 	admin.DELETE("/route-policies/:id", routePolicies.Delete)
 
 	protected := router.Group("/v1")
