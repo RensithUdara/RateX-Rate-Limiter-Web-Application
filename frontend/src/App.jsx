@@ -145,7 +145,7 @@ export function App() {
     <main className="shell">
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       <section className="workspace">
-        <Topbar onRefresh={load} />
+        <Topbar currentPage={currentPage} onRefresh={load} />
 
         {message && <div className="notice">{message}</div>}
 
@@ -153,7 +153,7 @@ export function App() {
         {currentPage === 'keys' && <KeysPage keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={handleCreateKey} onRevoke={(id) => action(() => revokeKey(id))} />}
         {currentPage === 'policies' && <PoliciesPage policies={policies} newPolicy={newPolicy} setNewPolicy={setNewPolicy} onCreate={handleCreatePolicy} onDelete={(id) => action(() => deletePolicy(id))} />}
         {currentPage === 'routes' && <RoutesPage routes={routePolicies} policies={policies} newRoute={newRoute} setNewRoute={setNewRoute} onCreate={handleCreateRoutePolicy} onDelete={(id) => action(() => deleteRoutePolicy(id))} />}
-        {currentPage === 'analytics' && <AnalyticsPage chartData={chartData} events={events} topRoutes={topRoutes} />}
+        {currentPage === 'analytics' && <AnalyticsPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} />}
         {currentPage === 'playground' && <PlaygroundPage result={testResult} onSend={handleSendRequest} />}
         {currentPage === 'docs' && <DocsPage />}
       </section>
