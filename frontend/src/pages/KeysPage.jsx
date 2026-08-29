@@ -2,7 +2,7 @@ import React from 'react'
 import { ExternalLink, KeyRound, Shield } from 'lucide-react'
 import { KeyPanel } from '../components/KeyPanel.jsx'
 
-export function KeysPage({ keys, policies, newKey, setNewKey, createdKey, onCreate, onRevoke }) {
+export function KeysPage({ keys, policies, newKey, setNewKey, createdKey, onCreate, onRevoke, onCopy }) {
   return (
     <div className="page-stack">
       <section className="page-hero">
@@ -17,7 +17,7 @@ export function KeysPage({ keys, policies, newKey, setNewKey, createdKey, onCrea
           <div className="wave two" />
         </div>
       </section>
-      <KeyPanel keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={onCreate} onRevoke={onRevoke} />
+      <KeyPanel keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={onCreate} onRevoke={onRevoke} onCopy={onCopy} />
       <section className="help-grid">
         <HelpCard icon={<KeyRound />} title="Need help?" text="Check out our documentation to learn more about API key management and best practices." action="View Documentation" />
         <HelpCard icon={<Shield />} title="Best Practices" text="Keep your API keys secure and never expose them in client-side code." action="Learn More" />
