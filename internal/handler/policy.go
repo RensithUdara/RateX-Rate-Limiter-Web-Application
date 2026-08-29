@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"ratex/internal/model"
+	"ratex/internal/repository"
 	"ratex/internal/service"
 )
 
@@ -55,6 +57,13 @@ func (h PolicyHandler) Update(c *gin.Context) {
 
 func (h PolicyHandler) Delete(c *gin.Context) {
 	if err := h.service.Delete(c.Request.Context(), c.Param("id")); err != nil {
+		if errors.Is(err, repository.ErrPolicyInUse) {
+			c.JSON(http.StatusConflict, gin.H{
+				"error":   "policy_in_use",
+				"message": "This policy is used by API keys or route policies. Reassign or delete those records before deleting the policy.",
+			})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
