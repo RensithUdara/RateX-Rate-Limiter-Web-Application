@@ -2,7 +2,7 @@ import React from 'react'
 import { ExternalLink, KeyRound, Shield } from 'lucide-react'
 import { KeyPanel } from '../components/KeyPanel.jsx'
 
-export function KeysPage({ keys, policies, newKey, setNewKey, createdKey, onCreate, onRevoke, onCopy }) {
+export function KeysPage({ keys, policies, newKey, setNewKey, createdKey, onCreate, onRevoke, onCopy, onDocs }) {
   return (
     <div className="page-stack">
       <section className="page-hero">
@@ -19,8 +19,8 @@ export function KeysPage({ keys, policies, newKey, setNewKey, createdKey, onCrea
       </section>
       <KeyPanel keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={onCreate} onRevoke={onRevoke} onCopy={onCopy} />
       <section className="help-grid">
-        <HelpCard icon={<KeyRound />} title="Need help?" text="Check out our documentation to learn more about API key management and best practices." action="View Documentation" />
-        <HelpCard icon={<Shield />} title="Best Practices" text="Keep your API keys secure and never expose them in client-side code." action="Learn More" />
+        <HelpCard icon={<KeyRound />} title="Need help?" text="Check out our documentation to learn more about API key management and best practices." action="View Documentation" onClick={onDocs} />
+        <HelpCard icon={<Shield />} title="Best Practices" text="Keep your API keys secure and never expose them in client-side code." action="Learn More" onClick={onDocs} />
       </section>
     </div>
   )
@@ -36,7 +36,7 @@ function PageHeader({ title, description }) {
   )
 }
 
-function HelpCard({ icon, title, text, action }) {
+function HelpCard({ icon, title, text, action, onClick }) {
   return (
     <article className="panel help-card">
       <span className="icon-badge">{icon}</span>
@@ -44,7 +44,7 @@ function HelpCard({ icon, title, text, action }) {
         <h2>{title}</h2>
         <p>{text}</p>
       </div>
-      <button className="secondary-action">{action} <ExternalLink size={15} /></button>
+      <button className="secondary-action" type="button" onClick={onClick}>{action} <ExternalLink size={15} /></button>
     </article>
   )
 }
