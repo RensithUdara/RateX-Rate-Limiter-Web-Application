@@ -14,7 +14,7 @@ export function AnalyticsPage({ stats, chartData, events, topRoutes, activeRange
           <p>Inspect request history, rejected traffic, and the busiest protected routes.</p>
         </section>
         <div className="range-select">
-          <button className="secondary-action"><CalendarDays size={16} /> Last {activeRange === '30m' ? '30 minutes' : activeRange}</button>
+          <button className="secondary-action" type="button" onClick={() => onRangeChange(activeRange === '30m' ? '1h' : activeRange === '1h' ? '6h' : activeRange === '6h' ? '24h' : '30m')}><CalendarDays size={16} /> Last {activeRange === '30m' ? '30 minutes' : activeRange}</button>
           <small>Showing data for the selected range.</small>
         </div>
       </section>
