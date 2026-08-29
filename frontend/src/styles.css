@@ -45,8 +45,13 @@ select {
   color: #172238;
   height: 34px;
   min-width: 0;
-  padding: 0 12px;
+  padding: 0 38px 0 12px;
   width: 100%;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 input:focus,
@@ -181,6 +186,12 @@ nav button:hover {
   padding: 0 26px 24px;
 }
 
+body.soft-contrast .workspace {
+  background:
+    linear-gradient(180deg, rgba(248, 251, 255, 0.95), rgba(233, 241, 253, 0.98)),
+    radial-gradient(circle at 70% 0%, rgba(37, 99, 255, 0.16), transparent 30%);
+}
+
 .topbar {
   align-items: center;
   background: rgba(255, 255, 255, 0.8);
@@ -213,11 +224,22 @@ nav button:hover {
   width: 32vw;
 }
 
+.search-box:focus-within,
+.table-search:focus-within {
+  border-color: #2563ff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 255, 0.1), 0 10px 30px rgba(32, 50, 82, 0.04);
+}
+
 .search-box input {
   border: 0;
   box-shadow: none;
   height: 34px;
   padding: 0;
+}
+
+.search-box input:focus,
+.table-search input:focus {
+  box-shadow: none;
 }
 
 .search-box kbd {
@@ -653,14 +675,26 @@ h2 {
 }
 
 .secret {
+  align-items: center;
   background: #ecfdf5;
   border: 1px solid #bbf7d0;
   border-radius: 8px;
   color: #166534;
-  display: block;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
   margin-top: 12px;
   overflow-x: auto;
   padding: 10px;
+}
+
+.secret button,
+.copy-inline {
+  background: #edf4ff;
+  color: #294266;
+  min-height: 30px;
+  min-width: 34px;
+  padding: 0;
 }
 
 .empty-state {
@@ -815,12 +849,27 @@ mark {
   padding: 0;
 }
 
+.secondary-icon {
+  background: #f5f8fd;
+  border: 1px solid #d6e1f1;
+  color: #4a607f;
+  min-height: 34px;
+  min-width: 42px;
+  padding: 0;
+}
+
 .danger-icon {
   background: #fee2e2;
   color: #ef4444;
   min-height: 34px;
   min-width: 42px;
   padding: 0;
+}
+
+.danger-action {
+  background: #ef4444;
+  color: #fff;
+  font-weight: 800;
 }
 
 .reset-button {
@@ -1196,6 +1245,16 @@ pre {
   justify-content: space-between;
 }
 
+.doc-card code span {
+  min-width: 0;
+}
+
+.inline-fields {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
 .playground-grid {
   display: grid;
   gap: 18px;
@@ -1246,6 +1305,14 @@ pre {
 .response-tabs span:first-of-type {
   color: #16a34a;
   margin-left: auto;
+}
+
+.response-tabs span.error-status {
+  color: #dc2626;
+}
+
+.response-tabs span.ok-status {
+  color: #16a34a;
 }
 
 .code-window {
@@ -1307,6 +1374,68 @@ pre {
 
 .check-item svg {
   color: #1262ff;
+}
+
+.modal-backdrop {
+  align-items: center;
+  background: rgba(8, 19, 38, 0.42);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 18px;
+  position: fixed;
+  z-index: 30;
+}
+
+.confirm-dialog {
+  background: #fff;
+  border: 1px solid #d7e2f0;
+  border-radius: 8px;
+  box-shadow: 0 22px 70px rgba(8, 19, 38, 0.22);
+  max-width: 430px;
+  padding: 24px;
+  position: relative;
+  width: 100%;
+}
+
+.dialog-close {
+  background: transparent;
+  color: #60728f;
+  min-height: 32px;
+  min-width: 32px;
+  padding: 0;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+
+.dialog-icon {
+  align-items: center;
+  background: #fff1f2;
+  border-radius: 8px;
+  color: #ef4444;
+  display: inline-flex;
+  height: 48px;
+  justify-content: center;
+  margin-bottom: 14px;
+  width: 48px;
+}
+
+.confirm-dialog h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.confirm-dialog p {
+  color: #637692;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 @media (max-width: 1180px) {
