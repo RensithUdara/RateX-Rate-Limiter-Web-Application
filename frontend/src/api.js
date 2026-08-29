@@ -74,7 +74,8 @@ export async function sendDemoRequest(apiKey) {
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE}${path}`, options)
   if (!response.ok) {
-    throw new Error(await response.text())
+    const text = await response.text()
+    throw new Error(`${response.status} ${response.statusText}${text ? `: ${text.trim()}` : ''}`)
   }
   if (options.empty || response.status === 204) {
     return null
