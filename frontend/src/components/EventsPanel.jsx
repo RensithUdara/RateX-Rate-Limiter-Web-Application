@@ -1,7 +1,7 @@
 import React from 'react'
 import { ArrowRight, BarChart3, Database, FileText, Trophy } from 'lucide-react'
 
-export function EventsPanel({ events, topRoutes }) {
+export function EventsPanel({ events, topRoutes, onViewAllRequests, onViewAllRoutes }) {
   return (
     <section className="split-grid">
       <section className="panel">
@@ -13,7 +13,7 @@ export function EventsPanel({ events, topRoutes }) {
               <p>Latest protected endpoint decisions.</p>
             </div>
           </div>
-          <button className="secondary-action compact-action">View all <ArrowRight size={15} /></button>
+          <button className="secondary-action compact-action" type="button" onClick={onViewAllRequests}>View all <ArrowRight size={15} /></button>
         </div>
         <div className="event-list">
           {events.map((event) => (
@@ -42,7 +42,7 @@ export function EventsPanel({ events, topRoutes }) {
               <p>Most active routes in the last hour.</p>
             </div>
           </div>
-          <button className="secondary-action compact-action">View all <ArrowRight size={15} /></button>
+          <button className="secondary-action compact-action" type="button" onClick={onViewAllRoutes || onViewAllRequests}>View all <ArrowRight size={15} /></button>
         </div>
         <div className="table route-usage">
           <div className="table-head usage-head">
