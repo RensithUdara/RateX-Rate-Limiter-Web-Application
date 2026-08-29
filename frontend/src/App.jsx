@@ -167,12 +167,12 @@ export function App() {
     <main className="shell">
       <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       <section className="workspace">
-        <Topbar currentPage={currentPage} onRefresh={load} />
+        <Topbar currentPage={currentPage} onRefresh={load} onNotify={setMessage} />
 
         {message && <div className="notice">{message}</div>}
 
         {currentPage === 'overview' && <OverviewPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} activeRange={activeRange} onRangeChange={setActiveRange} onViewAll={() => setCurrentPage('analytics')} />}
-        {currentPage === 'keys' && <KeysPage keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={handleCreateKey} onCopy={() => setMessage('Copied to clipboard')} onRevoke={(id) => confirmAction({ title: 'Revoke API key?', message: 'This key will stop authenticating requests immediately.', confirmText: 'Revoke key', onConfirm: () => action(() => revokeKey(id)) })} />}
+        {currentPage === 'keys' && <KeysPage keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={handleCreateKey} onCopy={() => setMessage('Copied to clipboard')} onDocs={() => setCurrentPage('docs')} onRevoke={(id) => confirmAction({ title: 'Revoke API key?', message: 'This key will stop authenticating requests immediately.', confirmText: 'Revoke key', onConfirm: () => action(() => revokeKey(id)) })} />}
         {currentPage === 'policies' && <PoliciesPage policies={policies} newPolicy={newPolicy} setNewPolicy={setNewPolicy} onCreate={handleCreatePolicy} onUpdate={handleUpdatePolicy} onDelete={(policy) => confirmAction({ title: 'Delete policy?', message: `Delete "${policy.name}"? Policies used by keys or routes cannot be removed until reassigned.`, onConfirm: () => action(() => deletePolicy(policy.id)) })} />}
         {currentPage === 'routes' && <RoutesPage routes={routePolicies} policies={policies} newRoute={newRoute} setNewRoute={setNewRoute} onCreate={handleCreateRoutePolicy} onUpdate={handleUpdateRoutePolicy} onDelete={(route) => confirmAction({ title: 'Delete route policy?', message: `Remove ${route.method} ${route.route_pattern} from rate limiting rules?`, onConfirm: () => action(() => deleteRoutePolicy(route.id)) })} onDocs={() => setCurrentPage('docs')} />}
         {currentPage === 'analytics' && <AnalyticsPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} activeRange={activeRange} onRangeChange={setActiveRange} onLoadMore={() => setEventLimit((value) => value + 30)} />}
