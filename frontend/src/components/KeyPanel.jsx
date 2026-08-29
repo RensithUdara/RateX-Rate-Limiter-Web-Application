@@ -1,5 +1,5 @@
 import React from 'react'
-import { KeyRound, Plus, Trash2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Copy, KeyRound, Plus, Trash2 } from 'lucide-react'
 
 export function KeyPanel({ keys, policies, newKey, setNewKey, createdKey, onCreate, onRevoke }) {
   return (
@@ -19,6 +19,7 @@ export function KeyPanel({ keys, policies, newKey, setNewKey, createdKey, onCrea
         <select value={newKey.policy_id} onChange={(event) => setNewKey({ ...newKey, policy_id: event.target.value })}>
           {policies.map((policy) => <option key={policy.id} value={policy.id}>{policy.name}</option>)}
         </select>
+        <button className="primary-action create-key-button"><KeyRound size={17} /> Create Key</button>
       </form>
       {createdKey && <code className="secret">{createdKey}</code>}
       {keys.length === 0 ? (
@@ -29,16 +30,36 @@ export function KeyPanel({ keys, policies, newKey, setNewKey, createdKey, onCrea
         </div>
       ) : (
         <div className="table key-table">
+          <div className="table-head key-head">
+            <span>Application</span>
+            <span>API Key</span>
+            <span>Environment</span>
+            <span>Created At</span>
+            <span>Actions</span>
+          </div>
           {keys.map((key) => (
-            <div className="row" key={key.id}>
+            <div className="row key-row" key={key.id}>
               <span>{key.name}</span>
-              <span>{key.key_prefix}</span>
-              <span>{key.policy_name}</span>
+              <span className="key-copy">{key.key_prefix}<button type="button" title="Copy API key prefix"><Copy size={15} /></button></span>
+              <span><mark>{key.policy_name || 'default'}</mark></span>
+              <span>{formatDate(key.created_at)}</span>
               <button className="danger-icon" onClick={() => onRevoke(key.id)} title="Revoke key"><Trash2 size={15} /></button>
             </div>
           ))}
+          <div className="table-footer">
+            <span>Showing 1 of {keys.length}</span>
+            <div>
+              <button className="pager" type="button"><ChevronLeft size={17} /></button>
+              <button className="pager" type="button"><ChevronRight size={17} /></button>
+            </div>
+          </div>
         </div>
       )}
     </section>
   )
+}
+
+function formatDate(value) {
+  if (!value) return 'Just now'
+  return new Date(value).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
