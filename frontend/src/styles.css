@@ -1097,3 +1097,269 @@ pre {
   }
 }
 
+/* Screen redesign overrides */
+.analytics-heading {
+  align-items: end;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.range-select {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+}
+
+.range-select small {
+  color: #6e80a0;
+  font-size: 12px;
+}
+
+.analytics-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.metric.purple .metric-icon {
+  background: #f3e8ff;
+  color: #8b5cf6;
+}
+
+.metric.purple .mini-bars i {
+  background: #a78bfa;
+}
+
+.route-form.labeled {
+  align-items: end;
+  gap: 12px;
+  grid-template-columns: 190px minmax(0, 1fr) 270px 190px;
+}
+
+.route-form.labeled label {
+  display: grid;
+  gap: 8px;
+}
+
+.route-form.labeled label span,
+.route-form.labeled label small {
+  font-weight: 800;
+}
+
+.route-form.labeled label small {
+  color: #667da3;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.attach-button {
+  min-height: 40px;
+}
+
+.route-head,
+.route-row {
+  grid-template-columns: 120px minmax(0, 1fr) minmax(0, 180px) 140px 120px;
+}
+
+.method-badge {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.method-badge.purple {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+
+.compact-action {
+  min-height: 34px;
+  min-width: auto;
+  padding: 0 12px;
+}
+
+.route-create-card,
+.route-list-card {
+  padding: 20px;
+}
+
+.full-help {
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+}
+
+.doc-card {
+  min-height: 190px;
+}
+
+.doc-card code {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.playground-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) 390px;
+}
+
+.tester-console {
+  display: grid;
+  gap: 16px;
+}
+
+.request-line {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 140px minmax(0, 1fr) 160px;
+}
+
+.response-tabs {
+  align-items: center;
+  border-bottom: 1px solid #dfe8f5;
+  display: flex;
+  gap: 18px;
+  min-height: 42px;
+}
+
+.response-tabs button {
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: #0b2148;
+  font-weight: 750;
+  min-height: 40px;
+  padding: 0 8px;
+}
+
+.response-tabs button.active {
+  border-color: #1262ff;
+  color: #1262ff;
+}
+
+.response-tabs span {
+  align-items: center;
+  color: #10213f;
+  display: inline-flex;
+  gap: 7px;
+}
+
+.response-tabs span:first-of-type {
+  color: #16a34a;
+  margin-left: auto;
+}
+
+.code-window {
+  line-height: 1.45;
+  min-height: 330px;
+  position: relative;
+}
+
+.copy-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  position: absolute;
+  right: 16px;
+  top: 14px;
+}
+
+.playground-side {
+  display: grid;
+  gap: 18px;
+}
+
+.sample-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.sample-request {
+  align-items: center;
+  border: 1px solid #dfe8f5;
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 66px minmax(0, 1fr) auto;
+  min-height: 64px;
+  padding: 10px;
+}
+
+.sample-request strong,
+.sample-request small {
+  display: block;
+}
+
+.sample-request small {
+  color: #6f81a0;
+}
+
+.checklist-card {
+  display: grid;
+  gap: 14px;
+}
+
+.check-item {
+  align-items: center;
+  color: #10213f;
+  display: inline-flex;
+  gap: 10px;
+}
+
+.check-item svg {
+  color: #1262ff;
+}
+
+@media (max-width: 1180px) {
+  .analytics-heading,
+  .analytics-metrics,
+  .playground-grid,
+  .route-form.labeled {
+    grid-template-columns: 1fr;
+  }
+
+  .range-select {
+    justify-items: start;
+  }
+}
+
+@media (max-width: 620px) {
+  .route-head,
+  .route-row,
+  .request-line,
+  .sample-request,
+  .full-help {
+    grid-template-columns: 1fr;
+  }
+
+  .response-tabs {
+    align-items: start;
+    display: grid;
+  }
+
+  .response-tabs span:first-of-type {
+    margin-left: 0;
+  }
+}
+
+/* Interactive segmented controls */
+button:focus,
+button:focus-visible {
+  outline: none;
+}
+
+.segments button {
+  border: 0;
+  outline: none;
+}
+
+.segments button:hover {
+  background: #eef5ff;
+}
+
+.segments button.active,
+.segments button.active:hover,
+.segments button.active:focus {
+  background: #2563ff;
+  color: #fff;
+}
+
