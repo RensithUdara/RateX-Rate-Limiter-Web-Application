@@ -2,7 +2,7 @@ import React from 'react'
 import { Shield } from 'lucide-react'
 import { PolicyPanel } from '../components/PolicyPanel.jsx'
 
-export function PoliciesPage({ policies, newPolicy, setNewPolicy, onCreate, onDelete }) {
+export function PoliciesPage({ policies, newPolicy, setNewPolicy, onCreate, onUpdate, onDelete }) {
   return (
     <div className="page-stack">
       <section className="page-hero">
@@ -21,7 +21,7 @@ export function PoliciesPage({ policies, newPolicy, setNewPolicy, onCreate, onDe
           <div className="wave two" />
         </div>
       </section>
-      <PolicyPanel policies={policies} newPolicy={newPolicy} setNewPolicy={setNewPolicy} onCreate={onCreate} onDelete={onDelete} />
+      <PolicyPanel policies={policies} newPolicy={newPolicy} setNewPolicy={setNewPolicy} onCreate={onCreate} onUpdate={onUpdate} onDelete={onDelete} />
     </div>
   )
 }
