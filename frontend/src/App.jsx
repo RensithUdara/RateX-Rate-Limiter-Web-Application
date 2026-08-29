@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Activity, Ban, Server, ShieldCheck } from 'lucide-react'
 import {
   createKey,
   createPolicy,
@@ -17,14 +16,15 @@ import {
   sendDemoRequest,
 } from './api.js'
 import { EventsPanel } from './components/EventsPanel.jsx'
-import { KeyPanel } from './components/KeyPanel.jsx'
-import { Metric } from './components/Metric.jsx'
-import { PolicyPanel } from './components/PolicyPanel.jsx'
-import { RequestTester } from './components/RequestTester.jsx'
-import { RoutePolicyPanel } from './components/RoutePolicyPanel.jsx'
 import { Sidebar } from './components/Sidebar.jsx'
 import { Topbar } from './components/Topbar.jsx'
-import { TrafficChart } from './components/TrafficChart.jsx'
+import { AnalyticsPage } from './pages/AnalyticsPage.jsx'
+import { DocsPage } from './pages/DocsPage.jsx'
+import { KeysPage } from './pages/KeysPage.jsx'
+import { OverviewPage } from './pages/OverviewPage.jsx'
+import { PlaygroundPage } from './pages/PlaygroundPage.jsx'
+import { PoliciesPage } from './pages/PoliciesPage.jsx'
+import { RoutesPage } from './pages/RoutesPage.jsx'
 
 export function App() {
   const [stats, setStats] = useState({ requests: 0, allowed: 0, rejected: 0 })
@@ -37,6 +37,7 @@ export function App() {
   const [createdKey, setCreatedKey] = useState('')
   const [message, setMessage] = useState('')
   const [testResult, setTestResult] = useState(null)
+  const [currentPage, setCurrentPage] = useState('overview')
   const [newPolicy, setNewPolicy] = useState({ name: '', algorithm: 'token_bucket', request_limit: 100, window_seconds: 60, burst_capacity: 100 })
   const [newKey, setNewKey] = useState({ name: 'Demo application', policy_id: '' })
   const [newRoute, setNewRoute] = useState({ method: 'GET', route_pattern: '/v1/products', policy_id: '' })
@@ -137,45 +138,19 @@ export function App() {
 
   return (
     <main className="shell">
-      <Sidebar />
+      <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
       <section className="workspace">
         <Topbar onRefresh={load} />
 
-        <section className="hero">
-          <div className="hero-copy">
-            <span className="pill">Distributed API rate limiting</span>
-            <h1>Control traffic across Go instances with shared Redis state.</h1>
-            <p>Simple. Scalable. Reliable. Keep your APIs fair and fast with RateX.</p>
-          </div>
-          <div className="scale-card" aria-label="Built for scale">
-            <Server className="scale-icon" size={46} />
-            <div>
-              <strong>Built for scale</strong>
-              <span>Route policies, telemetry, API keys, and live enforcement.</span>
-            </div>
-            <div className="wave one" />
-            <div className="wave two" />
-          </div>
-        </section>
-
         {message && <div className="notice">{message}</div>}
 
-        <section id="overview" className="metrics-grid">
-          <Metric tone="blue" icon={<Activity />} label="Total Requests" value={stats.requests} />
-          <Metric tone="green" icon={<ShieldCheck />} label="Allowed Requests" value={stats.allowed} />
-          <Metric tone="red" icon={<Ban />} label="Rejected Requests" value={stats.rejected} />
-        </section>
-
-        <TrafficChart data={chartData} />
-
-        <section className="split-grid">
-          <KeyPanel keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={handleCreateKey} onRevoke={(id) => action(() => revokeKey(id))} />
-          <PolicyPanel policies={policies} newPolicy={newPolicy} setNewPolicy={setNewPolicy} onCreate={handleCreatePolicy} onDelete={(id) => action(() => deletePolicy(id))} />
-        </section>
-
-        <RoutePolicyPanel routes={routePolicies} policies={policies} newRoute={newRoute} setNewRoute={setNewRoute} onCreate={handleCreateRoutePolicy} onDelete={(id) => action(() => deleteRoutePolicy(id))} />
-        <EventsPanel events={events} topRoutes={topRoutes} />
-        <RequestTester result={testResult} onSend={handleSendRequest} />
+        {currentPage === 'overview' && <OverviewPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} />}
+        {currentPage === 'keys' && <KeysPage keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={handleCreateKey} onRevoke={(id) => action(() => revokeKey(id))} />}
+        {currentPage === 'policies' && <PoliciesPage policies={policies} newPolicy={newPolicy} setNewPolicy={setNewPolicy} onCreate={handleCreatePolicy} onDelete={(id) => action(() => deletePolicy(id))} />}
+        {currentPage === 'routes' && <RoutesPage routes={routePolicies} policies={policies} newRoute={newRoute} setNewRoute={setNewRoute} onCreate={handleCreateRoutePolicy} onDelete={(id) => action(() => deleteRoutePolicy(id))} />}
+        {currentPage === 'analytics' && <AnalyticsPage chartData={chartData} events={events} topRoutes={topRoutes} />}
+        {currentPage === 'playground' && <PlaygroundPage result={testResult} onSend={handleSendRequest} />}
+        {currentPage === 'docs' && <DocsPage />}
       </section>
     </main>
   )
