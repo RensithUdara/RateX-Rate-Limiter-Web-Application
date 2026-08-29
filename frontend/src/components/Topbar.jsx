@@ -1,12 +1,22 @@
 import React from 'react'
 import { Bell, ChevronDown, RefreshCcw, Search, Sun } from 'lucide-react'
 
-export function Topbar({ onRefresh }) {
+const placeholders = {
+  overview: 'Search policies, keys, routes...',
+  keys: 'Search policies, keys, routes...',
+  policies: 'Search policies, keys, routes...',
+  routes: 'Search routes, methods, paths...',
+  analytics: 'Search anything...',
+  playground: 'Search endpoints, keys, routes...',
+  docs: 'Search documentation...',
+}
+
+export function Topbar({ currentPage, onRefresh }) {
   return (
     <div className="topbar">
       <label className="search-box">
         <Search size={20} />
-        <input placeholder="Search..." />
+        <input placeholder={placeholders[currentPage] || 'Search...'} />
         <kbd>Ctrl</kbd>
         <kbd>K</kbd>
       </label>
