@@ -1,6 +1,7 @@
 import React from 'react'
 import { BookOpen, Code2, Copy, Database, ExternalLink, Gauge, Settings } from 'lucide-react'
 import { PageHero } from '../components/PageHero.jsx'
+import { copyText } from '../utils/clipboard.js'
 
 export function DocsPage() {
   return (
@@ -25,7 +26,7 @@ export function DocsPage() {
           <h2>Need more details?</h2>
           <p>Check out the full documentation for advanced configuration, environment variables, and deployment guide.</p>
         </div>
-        <button className="secondary-action">View Full Documentation <ExternalLink size={15} /></button>
+        <button className="secondary-action" type="button" onClick={() => copyText('go run ./cmd/server\npsql "postgres://ratex:ratex@localhost:5432/ratex?sslmode=disable" -f .\\migrations\\001_init.sql')}>View Full Documentation <ExternalLink size={15} /></button>
       </section>
     </div>
   )
@@ -36,11 +37,16 @@ function DocCard({ badge, icon, title, text, lines }) {
     <article className="panel doc-card">
       <div className="panel-heading">
         <span className="icon-badge">{icon}</span>
-        <button className="secondary-action compact-action">{badge}</button>
+        <button className="secondary-action compact-action" type="button" onClick={() => copyText(lines.join('\n'))}>{badge}</button>
       </div>
       <h2>{title}</h2>
       <p>{text}</p>
-      {lines.map((line) => <code key={line}>{line}<Copy size={15} /></code>)}
+      {lines.map((line) => (
+        <code key={line}>
+          <span>{line}</span>
+          <button className="copy-inline" type="button" onClick={() => copyText(line)} title="Copy"><Copy size={15} /></button>
+        </code>
+      ))}
     </article>
   )
 }
