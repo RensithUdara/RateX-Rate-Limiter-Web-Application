@@ -37,6 +37,7 @@ export function App() {
   const [message, setMessage] = useState('')
   const [testResult, setTestResult] = useState(null)
   const [currentPage, setCurrentPage] = useState('overview')
+  const [activeRange, setActiveRange] = useState('30m')
   const [newPolicy, setNewPolicy] = useState({ name: '', algorithm: 'token_bucket', request_limit: 100, window_seconds: 60, burst_capacity: 100 })
   const [newKey, setNewKey] = useState({ name: 'Demo application', policy_id: '' })
   const [newRoute, setNewRoute] = useState({ method: 'GET', route_pattern: '/v1/products', policy_id: '' })
@@ -149,11 +150,11 @@ export function App() {
 
         {message && <div className="notice">{message}</div>}
 
-        {currentPage === 'overview' && <OverviewPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} />}
+        {currentPage === 'overview' && <OverviewPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} activeRange={activeRange} onRangeChange={setActiveRange} />}
         {currentPage === 'keys' && <KeysPage keys={keys} policies={policies} newKey={newKey} setNewKey={setNewKey} createdKey={createdKey} onCreate={handleCreateKey} onRevoke={(id) => action(() => revokeKey(id))} />}
         {currentPage === 'policies' && <PoliciesPage policies={policies} newPolicy={newPolicy} setNewPolicy={setNewPolicy} onCreate={handleCreatePolicy} onDelete={(id) => action(() => deletePolicy(id))} />}
         {currentPage === 'routes' && <RoutesPage routes={routePolicies} policies={policies} newRoute={newRoute} setNewRoute={setNewRoute} onCreate={handleCreateRoutePolicy} onDelete={(id) => action(() => deleteRoutePolicy(id))} />}
-        {currentPage === 'analytics' && <AnalyticsPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} />}
+        {currentPage === 'analytics' && <AnalyticsPage stats={stats} chartData={chartData} events={events} topRoutes={topRoutes} activeRange={activeRange} onRangeChange={setActiveRange} />}
         {currentPage === 'playground' && <PlaygroundPage result={testResult} onSend={handleSendRequest} />}
         {currentPage === 'docs' && <DocsPage />}
       </section>
