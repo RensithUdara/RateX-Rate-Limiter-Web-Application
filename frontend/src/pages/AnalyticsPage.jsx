@@ -4,7 +4,7 @@ import { Metric } from '../components/Metric.jsx'
 import { TrafficChart } from '../components/TrafficChart.jsx'
 import { EventsPanel } from '../components/EventsPanel.jsx'
 
-export function AnalyticsPage({ stats, chartData, events, topRoutes, activeRange, onRangeChange }) {
+export function AnalyticsPage({ stats, chartData, events, topRoutes, activeRange, onRangeChange, onLoadMore }) {
   return (
     <div className="page-stack">
       <section className="analytics-heading">
@@ -25,7 +25,7 @@ export function AnalyticsPage({ stats, chartData, events, topRoutes, activeRange
         <Metric tone="purple" icon={<Clock />} label="Avg. Response Time" value="0 ms" />
       </section>
       <TrafficChart data={chartData} activeRange={activeRange} onRangeChange={onRangeChange} />
-      <EventsPanel events={events} topRoutes={topRoutes} />
+      <EventsPanel events={events} topRoutes={topRoutes} onViewAllRequests={onLoadMore} />
     </div>
   )
 }
