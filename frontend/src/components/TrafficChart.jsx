@@ -2,7 +2,9 @@ import React from 'react'
 import { Sparkles } from 'lucide-react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-export function TrafficChart({ data }) {
+const ranges = ['30m', '1h', '6h', '24h']
+
+export function TrafficChart({ data, activeRange = '30m', onRangeChange = () => {} }) {
   return (
     <section className="panel chart-panel">
       <div className="panel-heading">
@@ -14,10 +16,16 @@ export function TrafficChart({ data }) {
           </div>
         </div>
         <div className="segments">
-          <button className="active">30m</button>
-          <button>1h</button>
-          <button>6h</button>
-          <button>24h</button>
+          {ranges.map((range) => (
+            <button
+              className={activeRange === range ? 'active' : ''}
+              key={range}
+              onClick={() => onRangeChange(range)}
+              type="button"
+            >
+              {range}
+            </button>
+          ))}
         </div>
       </div>
       <ResponsiveContainer width="100%" height={230}>
