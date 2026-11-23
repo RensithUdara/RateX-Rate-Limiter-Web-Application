@@ -7,4 +7,7 @@ frontend/node_modules/
 frontend/dist/
 *.tsbuildinfo
 .DS_Store
-config.bat
+.env
+.env.example
+.env.local
+.env.production
